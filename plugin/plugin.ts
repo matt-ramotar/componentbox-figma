@@ -9,6 +9,7 @@ enum Type {
     BUTTON,
     RECTANGLE,
     UNKNOWN,
+    VECTOR,
 }
 
 // Component
@@ -81,6 +82,10 @@ function ComponentFactory(node: SceneNode, type: Type): ComponentBoxComponent {
             return {
                 type: Type[Type.UNKNOWN],
             };
+        case Type.VECTOR:
+            return {
+                type: Type[Type.VECTOR],
+            };
     }
 }
 
@@ -145,7 +150,8 @@ function name(type: Type): string {
 // Main
 
 const rootComponents = figma.currentPage.selection.map((node) => search(node));
-console.log(rootComponents);
+const json = JSON.stringify(rootComponents);
+console.log(json);
 figma.closePlugin();
 
 function search(node: SceneNode): ComponentBoxComponent {
@@ -162,14 +168,15 @@ function search(node: SceneNode): ComponentBoxComponent {
 }
 
 function getType(node: SceneNode): Type {
-    const componentNode = node as ComponentNode;
-    const instanceNode = node as InstanceNode;
-    const textNode = node as TextNode;
-    const rectangleNode = node as RectangleNode;
+    const isComponentNode = node.type === 'COMPONENT';
+    const isInstanceNode = node.type === 'INSTANCE';
+    const isTextNode = node.type === 'TEXT';
+    const isRectangleNode = node.type === 'RECTANGLE';
+    const isVectorNode = node.type === 'VECTOR';
 
-    if (componentNode) {
+    if (isComponentNode) {
+        const componentNode = node as ComponentNode;
         const name = componentNode.name;
-        if (name === 'Column') return Type.COLUMN;
         if (name === 'Rectangle') return Type.RECTANGLE;
         if (name === 'Row') return Type.ROW;
 
@@ -178,8 +185,12 @@ function getType(node: SceneNode): Type {
         if (componentSetNodeName === 'Modal') return Type.MODAL;
     }
 
-    if (instanceNode) {
-        const numVectors = (node as InstanceNode).mainComponent?.children.filter((child) => child.type === 'VECTOR')?.length ?? 0;
+    if (isInstanceNode) {
+        const instanceNode = node as InstanceNode;
+
+        if (instanceNode.name == 'Column') return Type.COLUMN;
+
+        const numVectors = instanceNode.mainComponent?.children.filter((child) => child.type === 'VECTOR')?.length ?? 0;
         const isImage = numVectors > 0;
 
         if (isImage) return Type.IMAGE;
@@ -188,11 +199,15 @@ function getType(node: SceneNode): Type {
         if (isButton) return Type.BUTTON;
     }
 
-    if (textNode) {
+    if (isVectorNode) {
+        return Type.VECTOR;
+    }
+
+    if (isTextNode) {
         return Type.TEXT;
     }
 
-    if (rectangleNode) {
+    if (isRectangleNode) {
         return Type.RECTANGLE;
     }
 
