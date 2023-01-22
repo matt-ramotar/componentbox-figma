@@ -27,6 +27,21 @@ interface ComponentBoxButton extends ComponentBoxComponent {
     icon?: string;
 }
 
+interface ComponentBoxColumn extends ComponentBoxComponent {
+    verticalArrangement: string;
+    horizontalAlignment: string;
+    fillMaxSize?: boolean;
+    fillMaxHeight?: boolean;
+    fillMaxWidth?: boolean;
+    padding?: string;
+    margin?: string;
+    background?: string;
+    weight?: string;
+    height?: string;
+    width?: string;
+    designVariant: string;
+}
+
 interface ComponentBoxImage extends ComponentBoxComponent {
     name: string;
 }
@@ -38,13 +53,9 @@ function ComponentFactory(node: SceneNode, type: Type): ComponentBoxComponent {
         case Type.BUTTON:
             return ButtonFactory(node as InstanceNode);
         case Type.IMAGE:
-            // InstanceNode
             return ImageFactory(node as InstanceNode);
         case Type.COLUMN:
-            // ComponentNode
-            return {
-                type: Type[Type.COLUMN],
-            };
+            return ColumnFactory(node as ComponentNode);
         case Type.RECTANGLE:
             // ComponentNode
             // RectangleNode
@@ -103,6 +114,25 @@ function ImageFactory(node: InstanceNode): ComponentBoxImage {
     return {
         name,
         type: Type[Type.IMAGE],
+    };
+}
+
+function ColumnFactory(node: ComponentNode): ComponentBoxColumn {
+    const properties = node.variantProperties;
+    return {
+        verticalArrangement: properties?.['VerticalArrangement'] ?? 'Top',
+        horizontalAlignment: properties?.['HorizontalAlignment'] ?? 'Start',
+        fillMaxSize: properties?.['FillMaxSize'] == 'True' ?? false,
+        fillMaxHeight: properties?.['FillMaxHeight'] == 'True' ?? false,
+        fillMaxWidth: properties?.['FillMaxWidth'] == 'True' ?? false,
+        padding: properties?.['Padding'] ?? 'null',
+        margin: properties?.['Margin'] ?? 'null',
+        background: properties?.['Background'] ?? 'null',
+        weight: properties?.['Weight'] ?? 'null',
+        height: properties?.['Height'] ?? 'null',
+        width: properties?.['Width'] ?? 'null',
+        type: Type[Type.COLUMN],
+        designVariant: properties?.['DesignVariant'] ?? 'null',
     };
 }
 

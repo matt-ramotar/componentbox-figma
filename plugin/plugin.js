@@ -1,15 +1,15 @@
-'use strict';
+"use strict";
 // Type
 var Type;
 (function (Type) {
-    Type[(Type['COLUMN'] = 0)] = 'COLUMN';
-    Type[(Type['ROW'] = 1)] = 'ROW';
-    Type[(Type['MODAL'] = 2)] = 'MODAL';
-    Type[(Type['IMAGE'] = 3)] = 'IMAGE';
-    Type[(Type['TEXT'] = 4)] = 'TEXT';
-    Type[(Type['BUTTON'] = 5)] = 'BUTTON';
-    Type[(Type['RECTANGLE'] = 6)] = 'RECTANGLE';
-    Type[(Type['UNKNOWN'] = 7)] = 'UNKNOWN';
+    Type[Type["COLUMN"] = 0] = "COLUMN";
+    Type[Type["ROW"] = 1] = "ROW";
+    Type[Type["MODAL"] = 2] = "MODAL";
+    Type[Type["IMAGE"] = 3] = "IMAGE";
+    Type[Type["TEXT"] = 4] = "TEXT";
+    Type[Type["BUTTON"] = 5] = "BUTTON";
+    Type[Type["RECTANGLE"] = 6] = "RECTANGLE";
+    Type[Type["UNKNOWN"] = 7] = "UNKNOWN";
 })(Type || (Type = {}));
 // Factory
 function ComponentFactory(node, type) {
@@ -17,13 +17,9 @@ function ComponentFactory(node, type) {
         case Type.BUTTON:
             return ButtonFactory(node);
         case Type.IMAGE:
-            // InstanceNode
             return ImageFactory(node);
         case Type.COLUMN:
-            // ComponentNode
-            return {
-                type: Type[Type.COLUMN],
-            };
+            return ColumnFactory(node);
         case Type.RECTANGLE:
             // ComponentNode
             // RectangleNode
@@ -77,6 +73,25 @@ function ImageFactory(node) {
         type: Type[Type.IMAGE],
     };
 }
+function ColumnFactory(node) {
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
+    const properties = node.variantProperties;
+    return {
+        verticalArrangement: (_a = properties === null || properties === void 0 ? void 0 : properties['VerticalArrangement']) !== null && _a !== void 0 ? _a : 'Top',
+        horizontalAlignment: (_b = properties === null || properties === void 0 ? void 0 : properties['HorizontalAlignment']) !== null && _b !== void 0 ? _b : 'Start',
+        fillMaxSize: (_c = (properties === null || properties === void 0 ? void 0 : properties['FillMaxSize']) == 'True') !== null && _c !== void 0 ? _c : false,
+        fillMaxHeight: (_d = (properties === null || properties === void 0 ? void 0 : properties['FillMaxHeight']) == 'True') !== null && _d !== void 0 ? _d : false,
+        fillMaxWidth: (_e = (properties === null || properties === void 0 ? void 0 : properties['FillMaxWidth']) == 'True') !== null && _e !== void 0 ? _e : false,
+        padding: (_f = properties === null || properties === void 0 ? void 0 : properties['Padding']) !== null && _f !== void 0 ? _f : 'null',
+        margin: (_g = properties === null || properties === void 0 ? void 0 : properties['Margin']) !== null && _g !== void 0 ? _g : 'null',
+        background: (_h = properties === null || properties === void 0 ? void 0 : properties['Background']) !== null && _h !== void 0 ? _h : 'null',
+        weight: (_j = properties === null || properties === void 0 ? void 0 : properties['Weight']) !== null && _j !== void 0 ? _j : 'null',
+        height: (_k = properties === null || properties === void 0 ? void 0 : properties['Height']) !== null && _k !== void 0 ? _k : 'null',
+        width: (_l = properties === null || properties === void 0 ? void 0 : properties['Width']) !== null && _l !== void 0 ? _l : 'null',
+        type: Type[Type.COLUMN],
+        designVariant: (_m = properties === null || properties === void 0 ? void 0 : properties['DesignVariant']) !== null && _m !== void 0 ? _m : 'null',
+    };
+}
 // Util
 function name(type) {
     return Type[type];
@@ -104,26 +119,25 @@ function getType(node) {
     const rectangleNode = node;
     if (componentNode) {
         const name = componentNode.name;
-        if (name === 'Column') return Type.COLUMN;
-        if (name === 'Rectangle') return Type.RECTANGLE;
-        if (name === 'Row') return Type.ROW;
+        if (name === 'Column')
+            return Type.COLUMN;
+        if (name === 'Rectangle')
+            return Type.RECTANGLE;
+        if (name === 'Row')
+            return Type.ROW;
         const componentSetNode = componentNode.parent;
         const componentSetNodeName = componentSetNode.name;
-        if (componentSetNodeName === 'Modal') return Type.MODAL;
+        if (componentSetNodeName === 'Modal')
+            return Type.MODAL;
     }
     if (instanceNode) {
-        const numVectors =
-            (_c =
-                (_b = (_a = node.mainComponent) === null || _a === void 0 ? void 0 : _a.children.filter((child) => child.type === 'VECTOR')) === null ||
-                _b === void 0
-                    ? void 0
-                    : _b.length) !== null && _c !== void 0
-                ? _c
-                : 0;
+        const numVectors = (_c = (_b = (_a = node.mainComponent) === null || _a === void 0 ? void 0 : _a.children.filter((child) => child.type === 'VECTOR')) === null || _b === void 0 ? void 0 : _b.length) !== null && _c !== void 0 ? _c : 0;
         const isImage = numVectors > 0;
-        if (isImage) return Type.IMAGE;
+        if (isImage)
+            return Type.IMAGE;
         const isButton = instanceNode.name === 'Button';
-        if (isButton) return Type.BUTTON;
+        if (isButton)
+            return Type.BUTTON;
     }
     if (textNode) {
         return Type.TEXT;
