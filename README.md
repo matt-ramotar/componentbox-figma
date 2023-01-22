@@ -1,1 +1,1 @@
-# Component Box Figma Plugin
+# Component Box + Figma
