@@ -1,10 +1,8 @@
 {
-  "name": "ComponentBox",
-  "id": "1195906110396392165",
-  "api": "1.0.0",
-  "main": "code.js",
-  "editorType": [
-    "figma"
-  ],
-  "ui": "ui.html"
+    "name": "ComponentBox",
+    "id": "1195906110396392165",
+    "api": "1.0.0",
+    "main": "plugin.js",
+    "editorType": ["figma"],
+    "ui": "ui.html"
 }

@@ -1,0 +1,19 @@
+{
+    "name": "componentbox-figma-plugin",
+    "version": "1.0.0",
+    "description": "Component Box Figma Plugin",
+    "main": "plugin.js",
+    "scripts": {
+        "build": "tsc -p tsconfig.json",
+        "watch": "npm run build -- --watch"
+    },
+    "author": "",
+    "license": "",
+    "devDependencies": {
+        "@figma/plugin-typings": "^1.57.1",
+        "typescript": "*"
+    },
+    "dependencies": {
+        "prettier": "^2.8.3"
+    }
+}
